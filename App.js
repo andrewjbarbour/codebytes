@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, Button, Switch } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, SafeAreaView, FlatList, Button, Switch } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { 
@@ -15,13 +15,24 @@ const FeedScreen = () => {
   </View>)
 }
 
+const renderItem = ({item}) => {
+  return (
+  <View style={styles.courseCard}>
+    <Text style={styles.courseText}>{item.title}</Text>
+  </View>
+  )
+}
+
 const CatalogScreen = () => {
   return (
-  <View style={styles.layout}>
-    <CourseCard name="Learn React"></CourseCard>
-    <CourseCard name="Learn React Native"></CourseCard>
-    <CourseCard name="Learn Swift"></CourseCard>
-  </View>)
+  <View style={styles.layout} >
+    <FlatList
+      
+      data={[{id: 1, title: 'React'}, {id: 2, title: 'React Native'}, {id: 3, title:'Swift'}, {id: 4, title:'Android'}, {id: 5, title:'Java'}]}
+      renderItem={renderItem}
+    />
+  </View>
+  )
 }
 
 const GoalScreen = () => {
@@ -39,7 +50,7 @@ const ProfileScreen = () => {
 const CourseCard = (props) => {
   return (
     <View style={styles.courseCard}>
-      <Text style={styles.courseText}>{props.name}</Text>
+      <Text style={styles.courseText}>{props.title}</Text>
     </View>
   )
 }
@@ -205,8 +216,7 @@ export default function App() {
 const styles = StyleSheet.create({
   layout: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center'
+    backgroundColor: '#fff'
   },
   courseCard: {
     flex: 1,
@@ -216,9 +226,12 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderWidth: 1,
     borderRadius: 15,
-    margin: 20,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: 20,
+    marginBottom: 20,
     width: 200,
-    maxHeight: 100 
+    height: 100 
   },
   courseText: {
     textAlign: 'center',
