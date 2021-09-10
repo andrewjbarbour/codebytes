@@ -104,15 +104,17 @@ const NotificationsScreen = () => {
   const [isEnabled, setIsEnabled] = useState(false)
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   return(
-    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 20}}>
-      <Text style={{marginRight: 50, fontSize: 16}}>Enable notifications</Text>
-      <Switch
-        thumbColor={isEnabled ? 'orange': '#f4f3f4'}
-        trackColor={'orange'}
-        ios_backgroundColor={isEnabled ? 'orange': '#f4f3f4'}
-        onValueChange={toggleSwitch}
-        value={isEnabled}
-      />
+    <View style={styles.switchContainer}>
+      <View style={styles.switch}>
+        <Text style={{marginRight: 50, fontSize: 16}}>Enable notifications</Text>
+        <Switch
+          thumbColor={isEnabled ? 'orange': '#f4f3f4'}
+          trackColor={{false: '#f4f3f4', true:'orange'}}
+          ios_backgroundColor={isEnabled ? 'orange': '#f4f3f4'}
+          onValueChange={toggleSwitch}
+          value={isEnabled}
+        />
+      </View>
     </View>
   )
 }
@@ -213,5 +215,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '700',
     color: 'orange'
+  },
+  switchContainer: {
+    flex: 0, 
+    height: 100, 
+    width: 400, 
+    justifyContent: "flex-start"
+  },
+  switch: {
+    flex: 1, 
+    flexDirection: 'row', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    padding: 20
   }
 });
