@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, SafeAreaView, FlatList, Button, Switch } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, FlatList, Button, Switch } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { 
@@ -25,13 +25,13 @@ const renderItem = ({item}) => {
 
 const CatalogScreen = () => {
   return (
-  <View style={styles.layout} >
+  <SafeAreaView style={styles.layout} >
     <FlatList
       
-      data={[{id: 1, title: 'React'}, {id: 2, title: 'React Native'}, {id: 3, title:'Swift'}, {id: 4, title:'Android'}, {id: 5, title:'Java'}]}
+      data={[{id: '1', title: 'React'}, {id: '2', title: 'React Native'}, {id: '3', title:'Swift'}, {id: '4', title:'Android'}, {id: '5', title:'Java'}]}
       renderItem={renderItem}
     />
-  </View>
+  </SafeAreaView>
   )
 }
 
@@ -87,18 +87,46 @@ export const MainNavigator = () => {
     <Tab.Screen
       name={'Feed'}
       component={FeedScreen}
+      options={{
+        headerTitleStyle: {
+          fontWeight: '800',
+          fontSize: 25
+        },
+        headerTitleAlign: 'center'
+      }}
     />
     <Tab.Screen
      name={ 'Catalog' }
      component={CatalogScreen}
+     options={{
+      headerTitleStyle: {
+        fontWeight: '800',
+        fontSize: 25
+      },
+      headerTitleAlign: 'center'
+    }}
     />
     <Tab.Screen
      name={ 'Goals' }
      component={GoalScreen}
+     options={{
+      headerTitleStyle: {
+        fontWeight: '800',
+        fontSize: 25
+      },
+      headerTitleAlign: 'center'
+    }}
     />
     <Tab.Screen
      name={ 'Profile' }
      component={ProfileNavigator}
+     options={{
+      headerTitleStyle: {
+        fontWeight: '800',
+        fontSize: 25
+      },
+      headerTitleAlign: 'center'
+    }}
     />
   </Tab.Navigator>
   )
@@ -249,7 +277,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', 
     justifyContent: 'flex-start', 
     alignItems: 'center', 
-    paddingLeft: 30
+    paddingLeft: 30,
   },
   switch:{
     flex: 2
