@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, FlatList, Pressable, Switch } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, Image, FlatList, Pressable, Switch } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -12,8 +12,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const FeedScreen = () => {
   return (
-  <View style={styles.layout}>
-  </View>)
+  <SafeAreaView style={styles.layout}>
+     <Text style={styles.catalogHeader}>Feed</Text>
+  </SafeAreaView>)
 }
 
 
@@ -21,6 +22,7 @@ const CatalogScreen = () => {
   const nav = useNavigation()
   return (
   <SafeAreaView style={styles.layout} >
+    <Text style={styles.catalogHeader}>Feed</Text>
     <FlatList
       
       data={[{id: '1', title: 'React'}, {id: '2', title: 'React Native'}, {id: '3', title:'Swift'}, {id: '4', title:'Android'}, {id: '5', title:'Java'}]}
@@ -44,8 +46,9 @@ const CatalogScreen = () => {
 
 const GoalScreen = () => {
   return (
-  <View style={styles.layout}>
-  </View>)
+  <SafeAreaView style={styles.layout}>
+    <Text style={styles.catalogHeader}>Goals</Text>
+  </SafeAreaView>)
 }
 
 
@@ -64,6 +67,7 @@ export const MainNavigator = () => {
     <Tab.Navigator
     
     screenOptions={({ route }) => ({
+      headerShown: false,
       tabBarShowLabel: false,
       tabBarStyle: {backgroundColor: 'red'},
       tabBarIcon: ({ focused, color, size, backgroundColor }) => {
@@ -236,7 +240,7 @@ const DrawerContent = (props) => {
   )
 }
 
-const drawerIcon = ({navigation}) => {
+const MenuButton = ({navigation}) => {
   return(
     <View style={{flex: 1, padding: 5, flexDirection: 'row', justifyContent: 'flex-end'}}>
     <Ionicons name={'ios-menu'} 
@@ -254,24 +258,30 @@ export const ProfileNavigator = (props) => {
   return (
     <Drawer.Navigator
       drawerContent={(props) => <DrawerContent {...props}/>}
-      screenOptions={{
+      screenOptions={({navigation}) => ({
+        headerLeft: () => 
+          <Ionicons name={'ios-menu'} 
+          size={50} 
+          color="black" 
+          onPress={()=> {navigation.toggleDrawer()}}
+          />,
+        headerTitleStyle: {
+          fontWeight: '800',
+          fontSize: 25
+        },
         drawerPosition:"right",
         drawerType:"front",
         swipeEdgeWidth: 100,
-        headerShown: false,
+        headerShown: true,
         drawerStyle: {
           backgroundColor: 'red',
           width: "100%",
           height: "100%"
         },
         drawerActiveTintColor: 'orange'
-      }
+      })
       }
     >
-      <Drawer.Screen
-        name={'Icon'}
-        component={drawerIcon}
-      />
       <Drawer.Screen
         name={'Account'}
         component={AccountScreen}
