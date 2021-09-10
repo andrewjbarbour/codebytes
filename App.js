@@ -100,22 +100,31 @@ const AccountScreen = () => {
   )
 }
 
-const NotificationsScreen = () => {
+const PreferencesSwitch = (props) => {
   const [isEnabled, setIsEnabled] = useState(false)
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   return(
     <View style={styles.switchContainer}>
-      <View style={styles.switch}>
-        <Text style={{marginRight: 50, fontSize: 16}}>Enable notifications</Text>
-        <Switch
-          thumbColor={isEnabled ? 'orange': '#f4f3f4'}
-          trackColor={{false: '#f4f3f4', true:'orange'}}
-          ios_backgroundColor={isEnabled ? 'orange': '#f4f3f4'}
-          onValueChange={toggleSwitch}
-          value={isEnabled}
-        />
-      </View>
+    <View style={styles.switchView}>
+      <Text style={styles.switchText}>{props.label}</Text>
+      <Switch styles={styles.switch}
+        thumbColor={isEnabled ? 'orange': '#f4f3f4'}
+        trackColor={{false: '#f4f3f4', true:'orange'}}
+        ios_backgroundColor={isEnabled ? 'orange': '#f4f3f4'}
+        onValueChange={toggleSwitch}
+        value={isEnabled}
+      />
     </View>
+  </View>
+  )
+}
+
+const NotificationsScreen = () => {
+  return(
+    <>
+    <PreferencesSwitch label="Enable notifications" />
+    <PreferencesSwitch label="Enable notification sounds" />
+    </>
   )
 }
 
@@ -218,15 +227,22 @@ const styles = StyleSheet.create({
   },
   switchContainer: {
     flex: 0, 
-    height: 100, 
-    width: 400, 
+    height: 100,
+    marginRight: 20,
     justifyContent: "flex-start"
   },
-  switch: {
+  switchView: {
     flex: 1, 
     flexDirection: 'row', 
-    justifyContent: 'center', 
+    justifyContent: 'flex-start', 
     alignItems: 'center', 
-    padding: 20
+    paddingLeft: 30
+  },
+  switch:{
+    flex: 2
+  },
+  switchText:{
+    flex: 1,
+    fontSize: 16
   }
 });
