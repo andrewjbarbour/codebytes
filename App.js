@@ -22,7 +22,7 @@ const CatalogScreen = () => {
   const nav = useNavigation()
   return (
   <SafeAreaView style={styles.layout} >
-    <Text style={styles.catalogHeader}>Feed</Text>
+    <Text style={styles.catalogHeader}>Catalog</Text>
     <FlatList
       
       data={[{id: '1', title: 'React'}, {id: '2', title: 'React Native'}, {id: '3', title:'Swift'}, {id: '4', title:'Android'}, {id: '5', title:'Java'}]}
@@ -183,7 +183,7 @@ const HistoryScreen = () => {
 const SettingsScreen = () => {
   return(
     <View>
-      <Text>Settings</Text>
+
     </View>
   )
 }
@@ -240,18 +240,6 @@ const DrawerContent = (props) => {
   )
 }
 
-const MenuButton = ({navigation}) => {
-  return(
-    <View style={{flex: 1, padding: 5, flexDirection: 'row', justifyContent: 'flex-end'}}>
-    <Ionicons name={'ios-menu'} 
-              size={50} 
-              color="black" 
-              onPress={() =>navigation.openDrawer()}
-              />
-    </View>
-  )
-}
-
 const Drawer = createDrawerNavigator();
 
 export const ProfileNavigator = (props) => {
@@ -259,9 +247,10 @@ export const ProfileNavigator = (props) => {
     <Drawer.Navigator
       drawerContent={(props) => <DrawerContent {...props}/>}
       screenOptions={({navigation}) => ({
-        headerLeft: () => 
+        headerLeft: () => <Text/>,
+        headerRight: () => 
           <Ionicons name={'ios-menu'} 
-          size={50} 
+          size={40} 
           color="black" 
           onPress={()=> {navigation.toggleDrawer()}}
           />,
