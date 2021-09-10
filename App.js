@@ -48,11 +48,6 @@ const GoalScreen = () => {
   </View>)
 }
 
-const ProfileScreen = () => {
-  return (
-  <View style={styles.layout}>
-  </View>)
-}
 
 const CourseCard = (props) => {
   return (
@@ -241,9 +236,21 @@ const DrawerContent = (props) => {
   )
 }
 
+const drawerIcon = ({navigation}) => {
+  return(
+    <View style={{flex: 1, padding: 5, flexDirection: 'row', justifyContent: 'flex-end'}}>
+    <Ionicons name={'ios-menu'} 
+              size={50} 
+              color="black" 
+              onPress={() =>navigation.openDrawer()}
+              />
+    </View>
+  )
+}
+
 const Drawer = createDrawerNavigator();
 
-export const ProfileNavigator = () => {
+export const ProfileNavigator = (props) => {
   return (
     <Drawer.Navigator
       drawerContent={(props) => <DrawerContent {...props}/>}
@@ -254,12 +261,17 @@ export const ProfileNavigator = () => {
         headerShown: false,
         drawerStyle: {
           backgroundColor: 'red',
-          width: "100%"
+          width: "100%",
+          height: "100%"
         },
         drawerActiveTintColor: 'orange'
       }
       }
     >
+      <Drawer.Screen
+        name={'Icon'}
+        component={drawerIcon}
+      />
       <Drawer.Screen
         name={'Account'}
         component={AccountScreen}
@@ -311,9 +323,14 @@ export const AppNavigator = () => {
       component={AndroidScreen}
     />
 
-<Stack.Screen
+    <Stack.Screen
       name="Java"
       component={JavaScreen}
+    />
+
+    <Stack.Screen
+      name="Profile Navigator"
+      component={ProfileNavigator}
     />
 
     </Stack.Navigator>
