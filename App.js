@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, FlatList, Button, Switch } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, FlatList, Pressable, Switch } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import { 
   createDrawerNavigator, 
   DrawerContentScrollView, 
@@ -15,21 +16,27 @@ const FeedScreen = () => {
   </View>)
 }
 
-const renderItem = ({item}) => {
-  return (
-  <View style={styles.courseCard}>
-    <Text style={styles.courseText}>{item.title}</Text>
-  </View>
-  )
-}
 
 const CatalogScreen = () => {
+  const nav = useNavigation()
   return (
   <SafeAreaView style={styles.layout} >
     <FlatList
       
       data={[{id: '1', title: 'React'}, {id: '2', title: 'React Native'}, {id: '3', title:'Swift'}, {id: '4', title:'Android'}, {id: '5', title:'Java'}]}
-      renderItem={renderItem}
+      renderItem={({item}) => {
+        return(
+        <View style={styles.courseCard}>
+          <Pressable 
+            onPress={() => nav.navigate(item.title)}
+            style = {({pressed}) => [
+              [styles.pressable, {backgroundColor: pressed ? 'white' : 'white'}]
+            ]}
+            >
+          <Text style={styles.courseText}>{item.title}</Text>
+          </Pressable>
+        </View>)
+      }}
     />
   </SafeAreaView>
   )
@@ -182,6 +189,46 @@ const SettingsScreen = () => {
   )
 }
 
+const ReactScreen = () => {
+  return(
+    <SafeAreaView>
+      <Text style={styles.catalogHeader}>Learn React</Text>
+    </SafeAreaView>
+  )
+}
+
+const ReactNativeScreen = () => {
+  return(
+    <SafeAreaView>
+      <Text style={styles.catalogHeader}>Learn React Native</Text>
+    </SafeAreaView>
+  )
+}
+
+const SwiftScreen = () => {
+  return(
+    <SafeAreaView>
+      <Text style={styles.catalogHeader}>Learn Swift</Text>
+    </SafeAreaView>
+  )
+}
+
+const AndroidScreen = () => {
+  return(
+    <SafeAreaView>
+      <Text style={styles.catalogHeader}>Learn Android</Text>
+    </SafeAreaView>
+  )
+}
+
+const JavaScreen = () => {
+  return(
+    <SafeAreaView>
+      <Text style={styles.catalogHeader}>Learn Java</Text>
+    </SafeAreaView>
+  )
+}
+
 
 const DrawerContent = (props) => {
   return (
@@ -233,10 +280,51 @@ export const ProfileNavigator = () => {
   )
 }
 
+const Stack = createStackNavigator()
+
+export const AppNavigator = () => {
+  return(
+    <Stack.Navigator screenOptions = {{headerShown: false}}>
+
+    <Stack.Screen
+      name="MainNavigator"
+      component={MainNavigator}
+    />
+
+    <Stack.Screen
+      name="React Native"
+      component={ReactNativeScreen}
+    />
+
+    <Stack.Screen
+      name="React"
+      component={ReactScreen}
+    />
+
+    <Stack.Screen
+      name="Swift"
+      component={SwiftScreen}
+    />
+
+    <Stack.Screen
+      name="Android"
+      component={AndroidScreen}
+    />
+
+<Stack.Screen
+      name="Java"
+      component={JavaScreen}
+    />
+
+    </Stack.Navigator>
+
+  )
+}
+
 export default function App() {
   return (
     <NavigationContainer styles={styles.layout}>
-      <MainNavigator styles={styles.layout} />
+      <AppNavigator styles={styles.layout} />
     </NavigationContainer>
   );
 }
@@ -285,5 +373,19 @@ const styles = StyleSheet.create({
   switchText:{
     flex: 1,
     fontSize: 16
+  },
+  pressable:{
+    width: 200,
+    borderWidth: 1,
+    borderRadius: 15,
+    height: 100,
+    flex: 1,
+    justifyContent: 'center'
+  },
+  catalogHeader:{
+    fontWeight: '800', 
+    fontSize: 25, 
+    textAlign: 'center',
+    marginTop: 10
   }
 });
