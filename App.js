@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, Image, FlatList, Pressable, Switch } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, Image, Modal, FlatList, Pressable, Switch } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -140,7 +140,7 @@ export const MainNavigator = () => {
 
 const AccountScreen = () => {
   return(
-    <View>
+    <View style={styles.accountScreen}>
     </View>
   )
 }
@@ -166,23 +166,28 @@ const PreferencesSwitch = (props) => {
 
 const NotificationsScreen = () => {
   return(
-    <>
+    <View style={styles.accountScreen}>
     <PreferencesSwitch label="Enable notifications" />
     <PreferencesSwitch label="Enable notification sounds" />
-    </>
+    </View>
   )
 }
 
 const HistoryScreen = () => {
   return(
-  <View>
+  <View style={styles.accountScreen}>
+    <Pressable   style = {({pressed}) => [
+              [styles.clearHistoryButton, {backgroundColor: pressed ? 'red' : 'white'}]
+            ]}>
+      <Text style={styles.buttonText}>Reset progress</Text>
+    </Pressable>
   </View>
   )
 }
 
 const SettingsScreen = () => {
   return(
-    <View>
+    <View style={styles.accountScreen}>
 
     </View>
   )
@@ -267,7 +272,8 @@ export const ProfileNavigator = (props) => {
           width: "100%",
           height: "100%"
         },
-        drawerActiveTintColor: 'orange'
+        drawerActiveTintColor: 'orange',
+       
       })
       }
     >
@@ -403,5 +409,27 @@ const styles = StyleSheet.create({
     fontSize: 25, 
     textAlign: 'center',
     marginTop: 10
+  },
+  accountScreen:{
+    flex: 1, 
+    width: "100%", 
+    height: "100%", 
+    backgroundColor: "white"
+  },
+  clearHistoryButton:{
+    width: 130,
+    height: 70,
+    justifyContent: 'center',
+    alignSelf: 'center',
+    backgroundColor: 'white',
+    margin: 50,
+    borderColor: 'black',
+    borderWidth: 1,
+    borderRadius: 100
+  },
+  buttonText:{
+    textAlign: "center",
+    fontSize: 16,
+    color: 'black'
   }
 });
