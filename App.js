@@ -174,11 +174,42 @@ const NotificationsScreen = () => {
 }
 
 const HistoryScreen = () => {
+  const [modalVisible, setModalVisible] = useState(false);
   return(
   <View style={styles.accountScreen}>
-    <Pressable   style = {({pressed}) => [
-              [styles.clearHistoryButton, {backgroundColor: pressed ? 'red' : 'white'}]
-            ]}>
+   
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        
+      >
+        <View style={styles.modalView}>
+          <Text style={styles.modalHeader}>Reset progress? Your course progress will be permanently deleted.</Text>
+          <View style={styles.modalButtonView}>
+          <Pressable
+            style = {({pressed}) => [[styles.clearHistoryButton, {backgroundColor: pressed ? '#ba1c00' : 'red'}]
+          ]}
+            onPress = {() => setModalVisible(false)}
+          >
+          <Text style={styles.buttonText}>Reset progress</Text>
+          </Pressable>
+          <Pressable
+            style = {({pressed}) => [[styles.clearHistoryButton, {backgroundColor: pressed ? '#ba1c00' : 'red'}]
+          ]}
+            onPress = {() => setModalVisible(false)}
+          >
+          <Text style={styles.buttonText}>Nevermind</Text>
+          </Pressable>
+          </View>
+        </View>
+      </Modal>
+
+    <Pressable   
+      style = {({pressed}) => [[styles.clearHistoryButton, {backgroundColor: pressed ? '#ba1c00' : 'red', display: modalVisible ? 'none': 'flex'}]
+            ]}
+      onPress = {() => setModalVisible(true)}
+      >
       <Text style={styles.buttonText}>Reset progress</Text>
     </Pressable>
   </View>
@@ -411,25 +442,51 @@ const styles = StyleSheet.create({
     marginTop: 10
   },
   accountScreen:{
-    flex: 1, 
-    width: "100%", 
-    height: "100%", 
+    flex: 1,
     backgroundColor: "white"
   },
   clearHistoryButton:{
     width: 130,
-    height: 70,
+    height: 50,
     justifyContent: 'center',
     alignSelf: 'center',
     backgroundColor: 'white',
-    margin: 50,
-    borderColor: 'black',
-    borderWidth: 1,
-    borderRadius: 100
+    marginTop: 20,
+    marginLeft: 10,
+    borderRadius: 50
   },
   buttonText:{
     textAlign: "center",
     fontSize: 16,
     color: 'black'
+  },
+  modalView:{
+    margin: 20,
+    marginTop: "50%",
+    height: 200,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    elevation: 5,
+    borderRadius: 20,
+    padding: 15,
+    shadowColor: "#000",
+    shadowRadius: 4,
+    shadowOpacity: 0.25,
+    shadowOffset: {
+      width: 0,
+      height: 2
+    }
+  },
+  modalHeader:{
+    fontSize: 16,
+    marginBottom: 30,
+    paddingLeft: 25,
+    paddingRight: 25,
+    textAlign: 'center'
+    
+  },
+  modalButtonView:{
+    justifyContent: 'center',
+    flexDirection: 'row'
   }
 });
