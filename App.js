@@ -148,6 +148,11 @@ const AccountScreen = () => {
       </Image>
       <Text style={styles.profileText}>dev@codebytes.com</Text>
       <Text style={styles.profileText}>Software Engineer 🚀</Text>
+      <Pressable
+        style={({pressed}) => [[styles.clearHistoryButton, {marginTop: 100}]]}
+      >
+        <Text style={[styles.buttonText], {color: 'blue', fontSize: 16}}>Update profile</Text>
+      </Pressable>
     </View>
   )
 }
