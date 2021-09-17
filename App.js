@@ -140,7 +140,14 @@ export const MainNavigator = () => {
 
 const AccountScreen = () => {
   return(
-    <View style={styles.accountScreen}>
+    <View style={[styles.accountScreen, {alignItems: 'center'}]}>
+      <Text style={styles.accountScreenHeader}>Username</Text>
+      <Image style={styles.profileImage}
+        source={require('./assets/profile.png')}
+      >
+      </Image>
+      <Text style={styles.profileText}>dev@codebytes.com</Text>
+      <Text style={styles.profileText}>Software Engineer 🚀</Text>
     </View>
   )
 }
@@ -488,5 +495,20 @@ const styles = StyleSheet.create({
   modalButtonView:{
     justifyContent: 'center',
     flexDirection: 'row'
+  },
+  accountScreenHeader: {
+    textAlign: 'center', 
+    fontSize: 24, 
+    marginTop: 30,
+    fontWeight: '700'  
+  },
+  profileImage:{
+    width: 150,
+    height: 150,
+    marginTop: 20
+  },
+  profileText: {
+    marginTop: 15,
+    fontSize: 16
   }
 });
