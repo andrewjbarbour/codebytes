@@ -39,12 +39,27 @@ const CatalogScreen = () => {
   )
 }
 
+const QuizScreen =({route, navigation}) => {
+  const {data} = route.params;
+  return(
+  <SafeAreaView>
+    <Text style={styles.quizHeader}>{data[0].question}</Text>
+    {data[0].choices.map(choice => (
+      <Pressable style={({pressed}) => [[styles.primaryButton, {width: 250, height: 60, padding: 5, backgroundColor: pressed ? '#ba1c00' : 'red'}]
+    ]}>
+        <Text style={styles.buttonText}>{choice}</Text>
+      </Pressable>
+    ))}
+  </SafeAreaView>
+  )
+}
+
 const GoalScreen = () => {
   return (
   <SafeAreaView style={styles.layout}>
     <Text style={styles.catalogHeader}>Goals</Text>
     <Pressable
-        style={({pressed}) => [[styles.clearHistoryButton, {marginTop: 100}]]}
+        style={({pressed}) => [[styles.primaryButton, {marginTop: 100}]]}
       >
         <Text style={[styles.buttonText], {color: 'blue', fontSize: 16}}>Set learning goals</Text>
       </Pressable>
@@ -140,7 +155,7 @@ const AccountScreen = () => {
       <Text style={styles.profileText}>dev@codebytes.com</Text>
       <Text style={styles.profileText}>Software Engineer 🚀</Text>
       <Pressable
-        style={({pressed}) => [[styles.clearHistoryButton, {marginTop: 100}]]}
+        style={({pressed}) => [[styles.primaryButton, {marginTop: 100}]]}
       >
         <Text style={[styles.buttonText], {color: 'blue', fontSize: 16}}>Update profile</Text>
       </Pressable>
@@ -191,14 +206,14 @@ const HistoryScreen = () => {
           <Text style={styles.modalHeader}>Reset progress? Your course progress will be permanently deleted.</Text>
           <View style={styles.modalButtonView}>
           <Pressable
-            style = {({pressed}) => [[styles.clearHistoryButton, {backgroundColor: pressed ? '#ba1c00' : 'red'}]
+            style = {({pressed}) => [[styles.primaryButton, {backgroundColor: pressed ? '#ba1c00' : 'red'}]
           ]}
             onPress = {() => setModalVisible(false)}
           >
           <Text style={styles.buttonText}>Reset progress</Text>
           </Pressable>
           <Pressable
-            style = {({pressed}) => [[styles.clearHistoryButton, {backgroundColor: pressed ? '#ba1c00' : 'red'}]
+            style = {({pressed}) => [[styles.primaryButton, {backgroundColor: pressed ? '#ba1c00' : 'red'}]
           ]}
             onPress = {() => setModalVisible(false)}
           >
@@ -209,7 +224,7 @@ const HistoryScreen = () => {
       </Modal>
 
     <Pressable   
-      style = {({pressed}) => [[styles.clearHistoryButton, {backgroundColor: pressed ? '#ba1c00' : 'red', display: modalVisible ? 'none': 'flex'}]
+      style = {({pressed}) => [[styles.primaryButton, {backgroundColor: pressed ? '#ba1c00' : 'red', display: modalVisible ? 'none': 'flex'}]
             ]}
       onPress = {() => setModalVisible(true)}
       >
@@ -231,14 +246,22 @@ const ReactScreen = () => {
   return(
     <SafeAreaView>
       <Text style={styles.catalogHeader}>Learn React</Text>
+  
     </SafeAreaView>
   )
 }
 
 const ReactNativeScreen = () => {
+  const nav = useNavigation()
   return(
     <SafeAreaView>
       <Text style={styles.catalogHeader}>Learn React Native</Text>
+      <Pressable 
+        style={({pressed}) => [styles.primaryButton, {marginTop: 100, backgroundColor: pressed ? '#ba1c00': 'red'}]}
+        onPress={()=> nav.navigate('Quiz', {data: data.reactNative})}
+      >
+      <Text style={styles.buttonText}>Take Quiz</Text>
+      </Pressable>
     </SafeAreaView>
   )
 }
@@ -372,6 +395,11 @@ export const AppNavigator = () => {
       component={ProfileNavigator}
     />
 
+    <Stack.Screen
+      name="Quiz"
+      component={QuizScreen}
+    />
+
     </Stack.Navigator>
 
   )
@@ -448,7 +476,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white"
   },
-  clearHistoryButton:{
+  primaryButton:{
     width: 130,
     height: 50,
     justifyContent: 'center',
@@ -506,6 +534,12 @@ const styles = StyleSheet.create({
   profileText: {
     marginTop: 15,
     fontSize: 16
+  },
+  quizHeader: {
+    fontSize: 22,
+    margin: 20,
+    marginTop: 50,
+    fontWeight: '700'
   }
 });
 
