@@ -3,11 +3,7 @@ import { StyleSheet, Text, View, SafeAreaView, Image, Modal, FlatList, Pressable
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import { 
-  createDrawerNavigator, 
-  DrawerContentScrollView, 
-  DrawerItemList,
-  DrawerItem  } from '@react-navigation/drawer'
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem  } from '@react-navigation/drawer'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const FeedScreen = () => {
@@ -16,7 +12,6 @@ const FeedScreen = () => {
      <Text style={styles.catalogHeader}>Feed</Text>
   </SafeAreaView>)
 }
-
 
 const CatalogScreen = () => {
   const nav = useNavigation()
@@ -54,15 +49,6 @@ const GoalScreen = () => {
         <Text style={[styles.buttonText], {color: 'blue', fontSize: 16}}>Set learning goals</Text>
       </Pressable>
   </SafeAreaView>)
-}
-
-
-const CourseCard = (props) => {
-  return (
-    <View style={styles.courseCard}>
-      <Text style={styles.courseText}>{props.title}</Text>
-    </View>
-  )
 }
 
 const Tab = createBottomTabNavigator();
