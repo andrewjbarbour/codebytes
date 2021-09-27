@@ -48,6 +48,11 @@ const GoalScreen = () => {
   return (
   <SafeAreaView style={styles.layout}>
     <Text style={styles.catalogHeader}>Goals</Text>
+    <Pressable
+        style={({pressed}) => [[styles.clearHistoryButton, {marginTop: 100}]]}
+      >
+        <Text style={[styles.buttonText], {color: 'blue', fontSize: 16}}>Set learning goals</Text>
+      </Pressable>
   </SafeAreaView>)
 }
 
@@ -517,3 +522,46 @@ const styles = StyleSheet.create({
     fontSize: 16
   }
 });
+
+const data = {
+  reactNative: [
+    {
+      id: 1,
+      question: 'Which feature does a FlatList not support?',
+      choices: ['Scroll loading', 'Pull to refresh', 'Sections', 'extraData and keyExtractor props'],
+      answer: 2
+    },
+    {
+      id: 2,
+      question: 'What\'s the difference between a NativeStackNavigator and a StackNavigator?',
+      choices: ['A StackNavigator has a higher performance ceiling than a NativeStackNavigator but is less customizable', 
+                'A NativeStackNavigator has a higher performance ceiling than a StackNavigator but is less customizable '
+                ],
+      answer: 1
+    },
+    {
+      id: 3,
+      question: 'Which features does the Platform API support?',
+      choices: ['isTV', 'OS', 'isWatch', 'A and B', 'all of the above'],
+      answer: 2
+    },
+    {
+      id: 4,
+      question: 'The navigation prop contains all of the following methods except',
+      choices: ['pop', 'goBack', 'popToTop', 'push'],
+      answer: 0
+    },
+    {
+      id: 5,
+      question: 'All of the following are valid values for the style prop except',
+      choices: ['a StyleSheet style', 'CSS', 'a JavaScript object containing styles', 'an array of stylesheets and style objects'],
+      answer: 1
+    },
+    {
+      id: 6,
+      question: 'SafeAreaView is supported on which platforms?',
+      chocies: ['ioS', 'Android', 'both'],
+      answer: 0
+    }
+  ]
+}
