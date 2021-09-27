@@ -39,17 +39,32 @@ const CatalogScreen = () => {
   )
 }
 
+const QuizButton = (props) => {
+  const [buttonColor, setButtonColor] = useState('orange') 
+  return(
+    <Pressable 
+    style={({pressed}) => [[styles.primaryButton, {width: 250, height: 60, padding: 5, backgroundColor: buttonColor}]]}
+    onPress={() => {
+      if(props.index === props.data[0].answer){
+        setButtonColor('green');
+      } else {
+        setButtonColor('red');
+      }
+    }}
+  >
+    <Text style={styles.buttonText}>{props.choice}</Text>
+  </Pressable>
+  )
+}
+
 const QuizScreen =({route, navigation}) => {
   const {data} = route.params;
   return(
   <View style={{flex:1}}>
     <ScrollView style={{flex: 3}}>
     <Text style={styles.quizHeader}>{data[0].question}</Text>
-    {data[0].choices.map(choice => (
-      <Pressable style={({pressed}) => [[styles.primaryButton, {width: 250, height: 60, padding: 5, backgroundColor: pressed ? '#ba1c00' : 'red'}]
-    ]}>
-        <Text style={styles.buttonText}>{choice}</Text>
-      </Pressable>
+    {data[0].choices.map((choice, index) => (
+     <QuizButton data={data} index={index} id={data[0].id} choice={choice}/>
     ))}
       </ScrollView>
     <View style={styles.quizButtonView}>
