@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, Image, Modal, FlatList, Pressable, Switch } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, Modal, FlatList, Pressable, Switch } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -42,7 +42,8 @@ const CatalogScreen = () => {
 const QuizScreen =({route, navigation}) => {
   const {data} = route.params;
   return(
-  <SafeAreaView>
+  <View style={{flex:1}}>
+    <ScrollView style={{flex: 3}}>
     <Text style={styles.quizHeader}>{data[0].question}</Text>
     {data[0].choices.map(choice => (
       <Pressable style={({pressed}) => [[styles.primaryButton, {width: 250, height: 60, padding: 5, backgroundColor: pressed ? '#ba1c00' : 'red'}]
@@ -50,7 +51,16 @@ const QuizScreen =({route, navigation}) => {
         <Text style={styles.buttonText}>{choice}</Text>
       </Pressable>
     ))}
-  </SafeAreaView>
+      </ScrollView>
+    <View style={styles.quizButtonView}>
+      <Pressable style={styles.quizButton}>
+        <Text style={styles.quizButtonText}>Previous</Text>
+      </Pressable>
+      <Pressable style={styles.quizButton}>
+        <Text style={styles.quizButtonText}>Next</Text>
+      </Pressable>
+    </View>
+  </View>
   )
 }
 
@@ -540,7 +550,24 @@ const styles = StyleSheet.create({
     margin: 20,
     marginTop: 50,
     fontWeight: '700'
-  }
+  },
+  quizButtonView: {
+    flexDirection: 'row',
+    marginTop: 20,
+    justifyContent: 'center'
+  },
+  quizButton: {
+    width: "50%",
+    height: 70,
+    borderColor: '#000',
+    borderWidth: 1, 
+    justifyContent: 'center',
+    alignItems: 'center',
+   
+  },
+quizButtonText: {
+  fontWeight: '500'
+}
 });
 
 const data = {
