@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, Modal, FlatList, Pressable, Switch } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -40,12 +40,15 @@ const CatalogScreen = () => {
 }
 
 const QuizButton = (props) => {
-  const [buttonColor, setButtonColor] = useState('orange') 
+  const [buttonColor, setButtonColor] = useState('orange');
+  useEffect(() => {
+    setButtonColor('orange');
+  }, [props.choice]) 
   return(
     <Pressable 
-    style={({pressed}) => [[styles.primaryButton, {width: 250, height: 60, padding: 5, backgroundColor: buttonColor}]]}
+    style={({pressed}) => [[styles.primaryButton, {width: 270, height: 60, padding: 5, backgroundColor: buttonColor}]]}
     onPress={() => {
-      if(props.index === props.data[0].answer){
+      if(props.index === props.data[props.id].answer){
         setButtonColor('green');
       } else {
         setButtonColor('red');
@@ -59,19 +62,34 @@ const QuizButton = (props) => {
 
 const QuizScreen =({route, navigation}) => {
   const {data} = route.params;
+  const [currentQuestion, setcurrentQuestion] = useState(0);
   return(
   <View style={{flex:1}}>
     <ScrollView style={{flex: 3}}>
-    <Text style={styles.quizHeader}>{data[0].question}</Text>
-    {data[0].choices.map((choice, index) => (
-     <QuizButton data={data} index={index} id={data[0].id} choice={choice}/>
+    <Text style={styles.quizHeader}>{data[currentQuestion].question}</Text>
+    {data[currentQuestion].choices.map((choice, index) => (
+     <QuizButton data={data} index={index} id={data[currentQuestion].id} choice={choice}/>
     ))}
       </ScrollView>
+    <Text style={styles.quizCounter}>{`${currentQuestion+1}/${data.length}`}</Text>
     <View style={styles.quizButtonView}>
-      <Pressable style={styles.quizButton}>
+      <Pressable 
+        style={styles.quizButton}
+        onPress={() => {
+          if(currentQuestion !== 0){
+            setcurrentQuestion(currentQuestion-1);
+          }
+          }}>
         <Text style={styles.quizButtonText}>Previous</Text>
       </Pressable>
-      <Pressable style={styles.quizButton}>
+      <Pressable 
+        style={styles.quizButton}
+        onPress={() => {
+          if(currentQuestion < (data.length-1)){
+            setcurrentQuestion(currentQuestion+1);
+          }
+        }}
+      >
         <Text style={styles.quizButtonText}>Next</Text>
       </Pressable>
     </View>
@@ -580,49 +598,53 @@ const styles = StyleSheet.create({
     alignItems: 'center',
    
   },
-quizButtonText: {
-  fontWeight: '500'
-}
+  quizButtonText: {
+    fontWeight: '500'
+  },
+  quizCounter:{
+    textAlign: 'center',
+    fontWeight: '500'
+  }
 });
 
 const data = {
   reactNative: [
     {
-      id: 1,
+      id: 0,
       question: 'Which feature does a FlatList not support?',
       choices: ['Scroll loading', 'Pull to refresh', 'Sections', 'extraData and keyExtractor props'],
       answer: 2
     },
     {
-      id: 2,
+      id: 1,
       question: 'What\'s the difference between a NativeStackNavigator and a StackNavigator?',
-      choices: ['A StackNavigator has a higher performance ceiling than a NativeStackNavigator but is less customizable', 
-                'A NativeStackNavigator has a higher performance ceiling than a StackNavigator but is less customizable '
+      choices: ['A StackNavigator is more performant but less customizable', 
+                'A NativeStackNavigator is more performant but less customizable'
                 ],
       answer: 1
     },
     {
-      id: 3,
+      id: 2,
       question: 'Which features does the Platform API support?',
       choices: ['isTV', 'OS', 'isWatch', 'A and B', 'all of the above'],
-      answer: 2
+      answer: 3
     },
     {
-      id: 4,
+      id: 3,
       question: 'The navigation prop contains all of the following methods except',
       choices: ['pop', 'goBack', 'popToTop', 'push'],
       answer: 0
     },
     {
-      id: 5,
+      id: 4,
       question: 'All of the following are valid values for the style prop except',
       choices: ['a StyleSheet style', 'CSS', 'a JavaScript object containing styles', 'an array of stylesheets and style objects'],
       answer: 1
     },
     {
-      id: 6,
+      id: 5,
       question: 'SafeAreaView is supported on which platforms?',
-      chocies: ['ioS', 'Android', 'both'],
+      choices: ['ioS', 'Android', 'both'],
       answer: 0
     }
   ]
