@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, Modal, FlatList, Pressable, Switch } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem  } from '@react-navigation/drawer'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+
 
 const FeedScreen = () => {
   return (
@@ -41,21 +42,27 @@ const CatalogScreen = () => {
 
 const QuizButton = (props) => {
   const [buttonColor, setButtonColor] = useState('orange');
+  const {setFeedbackActive, setCorrect} = props
   useEffect(() => {
     setButtonColor('orange');
+    setFeedbackActive(false);
   }, [props.choice]) 
   return(
     <Pressable 
     style={({pressed}) => [[styles.primaryButton, {width: 270, height: 60, padding: 5, backgroundColor: buttonColor}]]}
     onPress={() => {
+      setFeedbackActive(true)
       if(props.index === props.data[props.id].answer){
         setButtonColor('green');
+        setCorrect(true);
       } else {
         setButtonColor('red');
+        setCorrect(false);
       }
     }}
   >
     <Text style={styles.buttonText}>{props.choice}</Text>
+ 
   </Pressable>
   )
 }
@@ -63,14 +70,18 @@ const QuizButton = (props) => {
 const QuizScreen =({route, navigation}) => {
   const {data} = route.params;
   const [currentQuestion, setcurrentQuestion] = useState(0);
+  const [feedbackActive, setFeedbackActive] = useState(false);
+  const [correct, setCorrect] = useState(false);
+
   return(
   <View style={{flex:1}}>
     <ScrollView style={{flex: 3}}>
     <Text style={styles.quizHeader}>{data[currentQuestion].question}</Text>
     {data[currentQuestion].choices.map((choice, index) => (
-     <QuizButton data={data} index={index} id={data[currentQuestion].id} choice={choice}/>
+     <QuizButton data={data} index={index} id={data[currentQuestion].id} choice={choice} setFeedbackActive={setFeedbackActive} setCorrect={setCorrect}/>
     ))}
       </ScrollView>
+    {feedbackActive ? <Text style={styles.quizCounter}>{correct ? "Correct!" : "Not quite"}</Text> : <Text> </Text>}
     <Text style={styles.quizCounter}>{`${currentQuestion+1}/${data.length}`}</Text>
     <View style={styles.quizButtonView}>
       <Pressable 
