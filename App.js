@@ -95,6 +95,13 @@ const QuizScreen =({route, navigation}) => {
     return feedbackActive;
   }
 
+  const resetQuiz = () => {
+    setcurrentQuestion(0);
+    setFeedbackActive(false);
+    setCorrect(false);
+    setScore(0);
+  }
+
   return(
   <View style={{flex:1}}>
     <ScrollView style={{flex: 3}}>
@@ -133,6 +140,7 @@ const QuizScreen =({route, navigation}) => {
           }
           else{
             dispatch({type: 'TAKE_QUIZ', payload: 1})
+            resetQuiz();
             nav.navigate('Results', {score: score, possiblePoints: data.length});
           }
         }}
@@ -153,8 +161,15 @@ const ResultsScreen = ({route, navigation}) => {
         onPress={() => {
          navigation.navigate('React Native');
          }}>
-        <Text style={[styles.quizButtonText, {fontSize: 18}]}>Course Home</Text>
-      </Pressable>
+        <Text style={[styles.quizButtonText, {fontSize: 18}]}>Return Home</Text>
+    </Pressable>
+    <Pressable 
+        style={[styles.quizButton, {backgroundColor: 'red', marginTop: 10, borderRadius: 20, height: 60, width: 150, justifyContent: 'center', alignItems: 'center'}]}
+        onPress={() => {
+         navigation.navigate('Quiz', {data: data.reactNative});
+         }}>
+        <Text style={[styles.quizButtonText, {fontSize: 18}]}>Retake Quiz</Text>
+    </Pressable>
 
   </View>
   )
