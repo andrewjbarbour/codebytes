@@ -261,7 +261,7 @@ const AccountScreen = () => {
       </Image>
       <Text style={styles.profileText}>dev@codebytes.com</Text>
       <Text style={styles.profileText}>Software Engineer 🚀</Text>
-      <Text style={styles.profileText}>{`${state.quizCount} quizzes completed`}</Text>
+      <Text style={styles.profileText}>{`${state.quizCount} ${state.quizCount === 1 ? 'quiz' : 'quizzes'} completed`}</Text>
       <Pressable
         style={({pressed}) => [[styles.primaryButton, {marginTop: 100}]]}
       >
