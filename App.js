@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect, useReducer, useContext, createContext} from 'react';
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, Modal, FlatList, Pressable, Switch } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -6,6 +6,18 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem  } from '@react-navigation/drawer'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+const globalState = {
+  quizCount: 0
+}
+
+const AppContext = createContext(globalState);
+
+const reducer = (state, action) => {
+  switch(action.type){
+    case 'TAKE_QUIZ':
+      return { quizCount: state.quizCount+1}
+  }
+}
 
 const FeedScreen = () => {
   return (
@@ -42,7 +54,7 @@ const CatalogScreen = () => {
 
 const QuizButton = (props) => {
   const [buttonColor, setButtonColor] = useState('orange');
-  const {setFeedbackActive, setCorrect} = props
+  const {setFeedbackActive, getFeedbackActive, setCorrect, setScore} = props;
   useEffect(() => {
     setButtonColor('orange');
     setFeedbackActive(false);
@@ -51,13 +63,16 @@ const QuizButton = (props) => {
     <Pressable 
     style={({pressed}) => [[styles.primaryButton, {width: 270, height: 60, padding: 5, backgroundColor: buttonColor}]]}
     onPress={() => {
-      setFeedbackActive(true)
-      if(props.index === props.data[props.id].answer){
-        setButtonColor('green');
-        setCorrect(true);
-      } else {
-        setButtonColor('red');
-        setCorrect(false);
+      setFeedbackActive(true);
+      if(!getFeedbackActive()){
+        if(props.index === props.data[props.id].answer){
+          setButtonColor('green');
+          setCorrect(true);
+          setScore((prev)=> prev+1)
+        } else {
+          setButtonColor('red');
+          setCorrect(false);
+        }
       }
     }}
   >
@@ -68,20 +83,37 @@ const QuizButton = (props) => {
 }
 
 const QuizScreen =({route, navigation}) => {
+  const [state, dispatch] = useContext(AppContext);
   const {data} = route.params;
   const [currentQuestion, setcurrentQuestion] = useState(0);
   const [feedbackActive, setFeedbackActive] = useState(false);
   const [correct, setCorrect] = useState(false);
+  const [score, setScore] = useState(0);
+  const nav = useNavigation();
+
+  const getFeedbackActive = () => {
+    return feedbackActive;
+  }
 
   return(
   <View style={{flex:1}}>
     <ScrollView style={{flex: 3}}>
     <Text style={styles.quizHeader}>{data[currentQuestion].question}</Text>
     {data[currentQuestion].choices.map((choice, index) => (
-     <QuizButton data={data} index={index} id={data[currentQuestion].id} choice={choice} setFeedbackActive={setFeedbackActive} setCorrect={setCorrect}/>
+     <QuizButton 
+      data={data} 
+      index={index} 
+      id={data[currentQuestion].id} 
+      choice={choice} 
+      setFeedbackActive={setFeedbackActive} 
+      getFeedbackActive={getFeedbackActive}
+      setCorrect={setCorrect}
+      setScore={setScore}
+      />
     ))}
+    {feedbackActive ? <Text style={styles.quizFeedback}>{correct ? "Correct!" : "Not quite"}</Text> : <Text> </Text>}
       </ScrollView>
-    {feedbackActive ? <Text style={styles.quizCounter}>{correct ? "Correct!" : "Not quite"}</Text> : <Text> </Text>}
+
     <Text style={styles.quizCounter}>{`${currentQuestion+1}/${data.length}`}</Text>
     <View style={styles.quizButtonView}>
       <Pressable 
@@ -99,11 +131,31 @@ const QuizScreen =({route, navigation}) => {
           if(currentQuestion < (data.length-1)){
             setcurrentQuestion(currentQuestion+1);
           }
+          else{
+            dispatch({type: 'TAKE_QUIZ', payload: 1})
+            nav.navigate('Results', {score: score, possiblePoints: data.length});
+          }
         }}
       >
         <Text style={styles.quizButtonText}>Next</Text>
       </Pressable>
     </View>
+  </View>
+  )
+}
+
+const ResultsScreen = ({route, navigation}) => {
+  return(
+  <View style={styles.scoreView}>
+    <Text style={styles.scoreHeader}>{`Score: ${route.params.score/route.params.possiblePoints*100}%`}</Text>
+    <Pressable 
+        style={[styles.quizButton, {backgroundColor: 'red', marginTop: 10, borderRadius: 20, height: 60, width: 150, justifyContent: 'center', alignItems: 'center'}]}
+        onPress={() => {
+         navigation.navigate('React Native');
+         }}>
+        <Text style={[styles.quizButtonText, {fontSize: 18}]}>Course Home</Text>
+      </Pressable>
+
   </View>
   )
 }
@@ -199,6 +251,7 @@ export const MainNavigator = () => {
 }
 
 const AccountScreen = () => {
+  const [state, dispatch] = useContext(AppContext);
   return(
     <View style={[styles.accountScreen, {alignItems: 'center'}]}>
       <Text style={styles.accountScreenHeader}>Username</Text>
@@ -208,6 +261,7 @@ const AccountScreen = () => {
       </Image>
       <Text style={styles.profileText}>dev@codebytes.com</Text>
       <Text style={styles.profileText}>Software Engineer 🚀</Text>
+      <Text style={styles.profileText}>{`${state.quizCount} quizzes completed`}</Text>
       <Pressable
         style={({pressed}) => [[styles.primaryButton, {marginTop: 100}]]}
       >
@@ -454,16 +508,24 @@ export const AppNavigator = () => {
       component={QuizScreen}
     />
 
+    <Stack.Screen
+      name="Results"
+      component={ResultsScreen}
+    />
+
     </Stack.Navigator>
 
   )
 }
 
 export default function App() {
+  const [state, dispatch] = useReducer(reducer, globalState);
   return (
-    <NavigationContainer styles={styles.layout}>
-      <AppNavigator styles={styles.layout} />
-    </NavigationContainer>
+    <AppContext.Provider value={[state, dispatch]}>
+      <NavigationContainer styles={styles.layout}>
+        <AppNavigator styles={styles.layout} />
+      </NavigationContainer>
+    </AppContext.Provider>
   );
 }
 
@@ -615,6 +677,22 @@ const styles = StyleSheet.create({
   quizCounter:{
     textAlign: 'center',
     fontWeight: '500'
+  },
+  quizFeedback: {
+    textAlign: 'center',
+    fontWeight: '700',
+    fontSize: 22,
+    marginTop: 20
+  },
+  scoreView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  scoreHeader: {
+    fontSize: 24,
+    fontWeight: '700',
+
   }
 });
 
