@@ -102,6 +102,30 @@ const QuizScreen =({route, navigation}) => {
     setScore(0);
   }
 
+  const getCorrectFeedback = () => {
+    let num = Math.floor(Math.random()*4);
+    switch(num){
+      case 0: 
+        return "Great job!"
+      case 1:
+        return "Excelllent!"
+      case 2: 
+        return "That's right!"
+      case 3:
+        return "Correct!"
+    }
+  }
+
+  const getIncorrectFeedback = () => {
+    let num = Math.floor(Math.random()*2);
+    switch(num){
+      case 0: 
+        return "Not quite"
+      case 1:
+        return "Incorrect"
+    }
+  }
+
   return(
   <View style={{flex:1}}>
     <ScrollView style={{flex: 3}}>
@@ -118,7 +142,7 @@ const QuizScreen =({route, navigation}) => {
       setScore={setScore}
       />
     ))}
-    {feedbackActive ? <Text style={styles.quizFeedback}>{correct ? "Correct!" : "Not quite"}</Text> : <Text> </Text>}
+    {feedbackActive ? <Text style={styles.quizFeedback}>{correct ? getCorrectFeedback() : getIncorrectFeedback()}</Text> : <Text> </Text>}
       </ScrollView>
 
     <Text style={styles.quizCounter}>{`${currentQuestion+1}/${data.length}`}</Text>
