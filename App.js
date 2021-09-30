@@ -374,6 +374,22 @@ const ReactScreen = () => {
   )
 }
 
+const randomizeQuestions = (questions) => {
+  let randomOrder = new Set();
+  const randomizedQuestions = [];
+  while (randomOrder.size < questions.length){
+    randomOrder.add(Math.floor(Math.random()*questions.length));
+  }
+  for(let num of randomOrder){
+    randomizedQuestions.push(questions[num]);
+  }
+  /*Reset question ids to match new question order*/
+  for(let i = 0; i < randomizedQuestions.length; i++){
+    randomizedQuestions[i].id = i;
+  }
+  return randomizedQuestions;
+}
+
 const ReactNativeScreen = () => {
   const nav = useNavigation()
   return(
@@ -381,7 +397,9 @@ const ReactNativeScreen = () => {
       <Text style={styles.catalogHeader}>Learn React Native</Text>
       <Pressable 
         style={({pressed}) => [styles.primaryButton, {marginTop: 100, backgroundColor: pressed ? '#ba1c00': 'red'}]}
-        onPress={()=> nav.navigate('Quiz', {data: data.reactNative})}
+        onPress={()=> {
+          
+          nav.navigate('Quiz', {data: randomizeQuestions(randomizeQuestions(data.reactNative))})}}
       >
       <Text style={styles.buttonText}>Take Quiz</Text>
       </Pressable>
