@@ -35,8 +35,8 @@ const FeedScreen = () => {
      <Text style={styles.catalogHeader}>Feed</Text>
      <View style={[styles.centeredView, {justifyContent: 'flex-start', marginTop: 50}]}>
       <Text style={[styles.feedText, {color: 'black', fontSize: 20, fontWeight: '600', marginBottom: 5}]}>Latest Quiz Activity</Text>
-      {state.activity.map((activity) => (
-        <Text style={styles.feedText}>{activity}</Text>
+      {state.activity.map((activity, index) => (
+        <Text style={styles.feedText} key={index}>{activity}</Text>
       ))
       }
      </View>
@@ -151,7 +151,8 @@ const QuizScreen =({route, navigation}) => {
     {data[currentQuestion].choices.map((choice, index) => (
      <QuizButton 
       data={data} 
-      index={index} 
+      index={index}
+      key={index} 
       id={data[currentQuestion].id} 
       choice={choice} 
       setFeedbackActive={setFeedbackActive} 
