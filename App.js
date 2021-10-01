@@ -822,5 +822,13 @@ const data = {
       choices: ['ioS', 'Android', 'both'],
       answer: 0
     }
+  ],
+  react: [
+    {
+      id: 0,
+      question: 'What\'s not part of the useReducer syntax?',
+      choices: ['const [state, dispatch] = useReducer(reducer, initialState)', 'reducer(state, action)', 'createReducer()', 'action.payload'],
+      answer: 2
+    }
   ]
 }
