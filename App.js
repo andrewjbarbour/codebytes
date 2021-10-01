@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem  } from '@react-navigation/drawer'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const globalState = {
   quizCount: 0,
@@ -50,7 +51,7 @@ const CatalogScreen = () => {
     <Text style={styles.catalogHeader}>Catalog</Text>
     <FlatList
       
-      data={[{id: '1', title: 'React'}, {id: '2', title: 'React Native'}, {id: '3', title:'Swift'}, {id: '4', title:'Android'}, {id: '5', title:'Java'}]}
+      data={[{id: '1', title: 'React', icon: 'logo-react', iconType: 'Ionicon'}, {id: '2', title: 'React Native', icon: 'logo-react', iconType: 'Ionicon'}, {id: '3', title:'Swift', icon: 'language-swift', iconType: 'material' }, {id: '4', title:'Android', icon: 'logo-android', iconType: 'Ionicon'}, {id: '5', title:'Java', icon: 'language-java', iconType: 'material'}]}
       renderItem={({item}) => {
         return(
         <View style={styles.courseCard}>
@@ -60,6 +61,10 @@ const CatalogScreen = () => {
               [styles.pressable, {backgroundColor: pressed ? 'white' : 'white'}]
             ]}
             >
+          { item.iconType === 'Ionicon' ? 
+          <Ionicons style={styles.catalogIcon} name={item.icon} size={30} color={"black"}/> : 
+          <MaterialCommunityIcons style={styles.catalogIcon} name={item.icon} size={30} color={"black"}/> 
+          }
           <Text style={styles.courseText}>{item.title}</Text>
           </Pressable>
         </View>)
@@ -638,8 +643,12 @@ const styles = StyleSheet.create({
     width: 200,
     height: 100 
   },
+  catalogIcon: {
+    flex: 1,
+    marginLeft: 20
+  },
   courseText: {
-    textAlign: 'center',
+    flex: 2,
     fontWeight: '700',
     color: 'orange'
   },
@@ -669,7 +678,9 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     height: 100,
     flex: 1,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row'
   },
   catalogHeader:{
     fontWeight: '800', 
