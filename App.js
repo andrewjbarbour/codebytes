@@ -183,7 +183,7 @@ const QuizScreen =({route, navigation}) => {
           else{
             dispatch({type: 'TAKE_QUIZ', payload: `${quiz}, ${getTimestamp()}`})
             resetQuiz();
-            nav.navigate('Results', {score: score, possiblePoints: data.length});
+            nav.navigate('Results', {score: score, possiblePoints: data.length, quiz: quiz, data:data});
           }
         }}
       >
@@ -201,14 +201,14 @@ const ResultsScreen = ({route, navigation}) => {
     <Pressable 
         style={[styles.quizButton, {backgroundColor: 'red', marginTop: 10, borderRadius: 20, height: 60, width: 150, justifyContent: 'center', alignItems: 'center'}]}
         onPress={() => {
-         navigation.navigate('React Native');
+         navigation.navigate(route.params.quiz.toString());
          }}>
         <Text style={[styles.quizButtonText, {fontSize: 18}]}>Return Home</Text>
     </Pressable>
     <Pressable 
         style={[styles.quizButton, {backgroundColor: 'red', marginTop: 10, borderRadius: 20, height: 60, width: 150, justifyContent: 'center', alignItems: 'center'}]}
         onPress={() => {
-         navigation.navigate('Quiz', {data: data.reactNative});
+         navigation.navigate('Quiz', {data: route.params.data});
          }}>
         <Text style={[styles.quizButtonText, {fontSize: 18}]}>Retake Quiz</Text>
     </Pressable>
@@ -408,10 +408,18 @@ const SettingsScreen = () => {
 }
 
 const ReactScreen = () => {
+  const nav = useNavigation();
   return(
     <SafeAreaView>
       <Text style={styles.catalogHeader}>Learn React</Text>
-  
+      <Pressable 
+        style={({pressed}) => [styles.primaryButton, {marginTop: 100, backgroundColor: pressed ? '#ba1c00': 'red'}]}
+        onPress={()=> {
+          
+          nav.navigate('Quiz', {data: randomizeQuestions(randomizeQuestions(data.react)), quiz: 'React'})}}
+      >
+      <Text style={styles.buttonText}>Take Quiz</Text>
+      </Pressable>
     </SafeAreaView>
   )
 }
@@ -829,6 +837,30 @@ const data = {
       question: 'What\'s not part of the useReducer syntax?',
       choices: ['const [state, dispatch] = useReducer(reducer, initialState)', 'reducer(state, action)', 'createReducer()', 'action.payload'],
       answer: 2
+    },
+    {
+      id: 1,
+      question: 'The Context API requires everything except',
+      choices: ['useContext', 'Context.Consumer', 'createContext', 'Context.Provider'],
+      answer: 1
+    },
+    {
+      id: 2,
+      question: 'An empty dependency array in the useEffect hook updates',
+      choices: ['only once on initial render', 'on every render', 'when any variable changes'],
+      answer: 0
+    },
+    {
+      id: 3,
+      question: 'useRef`s use cases include',
+      choices: ['declaratively accessing the DOM', 'imperatively accessing the DOM', 'retaining a mutable value', 'A and C', 'A and B'],
+      answer: 3
+    },
+    {
+      id: 4,
+      question: 'Which is not a hook?',
+      choices: ['useCallback', 'useReference', 'useMemo', 'useImperativeHandle'],
+      answer: 1
     }
   ]
 }
