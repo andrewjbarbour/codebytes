@@ -7,7 +7,8 @@ import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerI
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const globalState = {
-  quizCount: 0
+  quizCount: 0,
+  activity: []
 }
 
 const AppContext = createContext(globalState);
@@ -15,14 +16,30 @@ const AppContext = createContext(globalState);
 const reducer = (state, action) => {
   switch(action.type){
     case 'TAKE_QUIZ':
-      return { quizCount: state.quizCount+1}
+      return { quizCount: state.quizCount+1, activity: [...state.activity, action.payload]}
   }
 }
 
+const getTimestamp = () => {
+  let quizTime = new Date(Date.now());
+  let timeStamp = quizTime.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+  if(timeStamp[0] === '0')
+    timeStamp = timeStamp.slice(1);
+  return timeStamp;
+}
+
 const FeedScreen = () => {
+  const[state, dispatch] = useContext(AppContext);
   return (
   <SafeAreaView style={styles.layout}>
      <Text style={styles.catalogHeader}>Feed</Text>
+     <View style={[styles.centeredView, {justifyContent: 'flex-start', marginTop: 50}]}>
+      <Text style={[styles.feedText, {color: 'black', fontSize: 20, fontWeight: '600', marginBottom: 5}]}>Latest Quiz Activity</Text>
+      {state.activity.map((activity) => (
+        <Text style={styles.feedText}>{activity}</Text>
+      ))
+      }
+     </View>
   </SafeAreaView>)
 }
 
@@ -85,6 +102,7 @@ const QuizButton = (props) => {
 const QuizScreen =({route, navigation}) => {
   const [state, dispatch] = useContext(AppContext);
   const {data} = route.params;
+  const quiz = route.params.quiz;
   const [currentQuestion, setcurrentQuestion] = useState(0);
   const [feedbackActive, setFeedbackActive] = useState(false);
   const [correct, setCorrect] = useState(false);
@@ -163,7 +181,7 @@ const QuizScreen =({route, navigation}) => {
             setcurrentQuestion(currentQuestion+1);
           }
           else{
-            dispatch({type: 'TAKE_QUIZ', payload: 1})
+            dispatch({type: 'TAKE_QUIZ', payload: `${quiz}, ${getTimestamp()}`})
             resetQuiz();
             nav.navigate('Results', {score: score, possiblePoints: data.length});
           }
@@ -423,7 +441,7 @@ const ReactNativeScreen = () => {
         style={({pressed}) => [styles.primaryButton, {marginTop: 100, backgroundColor: pressed ? '#ba1c00': 'red'}]}
         onPress={()=> {
           
-          nav.navigate('Quiz', {data: randomizeQuestions(randomizeQuestions(data.reactNative))})}}
+          nav.navigate('Quiz', {data: randomizeQuestions(randomizeQuestions(data.reactNative)), quiz: 'React Native'})}}
       >
       <Text style={styles.buttonText}>Take Quiz</Text>
       </Pressable>
@@ -591,6 +609,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff'
   },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   courseCard: {
     flex: 1,
     borderColor: '#808080',
@@ -750,6 +773,12 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '700',
 
+  },
+  feedText: {
+    fontSize: 16,
+    marginBottom: 2,
+    textAlign: 'center',
+    color: 'orange'
   }
 });
 
