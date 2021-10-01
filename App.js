@@ -201,14 +201,14 @@ const ResultsScreen = ({route, navigation}) => {
     <Pressable 
         style={[styles.quizButton, {backgroundColor: 'red', marginTop: 10, borderRadius: 20, height: 60, width: 150, justifyContent: 'center', alignItems: 'center'}]}
         onPress={() => {
-         navigation.navigate(route.params.quiz.toString());
+         navigation.navigate(`${route.params.quiz}`);
          }}>
         <Text style={[styles.quizButtonText, {fontSize: 18}]}>Return Home</Text>
     </Pressable>
     <Pressable 
         style={[styles.quizButton, {backgroundColor: 'red', marginTop: 10, borderRadius: 20, height: 60, width: 150, justifyContent: 'center', alignItems: 'center'}]}
         onPress={() => {
-         navigation.navigate('Quiz', {data: route.params.data});
+         navigation.navigate('Quiz', {data: route.params.data, quiz: route.params.quiz});
          }}>
         <Text style={[styles.quizButtonText, {fontSize: 18}]}>Retake Quiz</Text>
     </Pressable>
